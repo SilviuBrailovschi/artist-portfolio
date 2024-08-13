@@ -1,6 +1,6 @@
 // src/portfolio-item/portfolio-item.controller.ts
 
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PortfolioItemService } from './portfolio-item.service';
 import { PortfolioItem } from './portfolio-item.entity';
@@ -26,8 +26,10 @@ export class PortfolioItemController {
     }
 
     @Get()
-    async findAll() {
-        return this.portfolioItemService.findAll();
+    async findAll(@Query() query: any) {
+        // Pass the query parameters to the service method
+        console.log('--------------------------------------------INTYRA');
+        return this.portfolioItemService.findAll(query);
     }
 
     @Get(':id')

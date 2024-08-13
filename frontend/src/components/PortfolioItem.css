@@ -1,0 +1,34 @@
+/* src/components/PortfolioItem.css */
+.portfolio-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 16px;
+    background-color: #fff;
+}
+
+.portfolio-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.portfolio-item h3 {
+    margin: 8px 0;
+}
+
+.portfolio-item p {
+    font-size: 14px;
+    color: #666;
+}
+
+.portfolio-item a {
+    display: inline-block;
+    margin-top: 8px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.portfolio-item a:hover {
+    text-decoration: underline;
+}
