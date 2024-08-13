@@ -1,0 +1,15 @@
+.container {
+}
+
+.card-header, .card-footer {
+    background: #161b1e;
+    color: #ecf0f1;
+    /*padding: 1rem;*/
+    /*min-height: 50px;*/
+}
+
+.card-body {
+    background: #232830;
+    color: #ecf0f1;
+    min-height: calc(100vh - 150px);
+}

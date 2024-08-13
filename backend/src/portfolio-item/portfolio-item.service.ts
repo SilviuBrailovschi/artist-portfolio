@@ -1,42 +1,36 @@
-// src/portfolio-item/portfolio-item.service.ts
-
 import { Injectable } from '@nestjs/common';
 import { PortfolioItem } from './portfolio-item.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PortfolioItemService {
     constructor(
         @InjectRepository(PortfolioItem)
-        private readonly portfolioItemRepository: Repository<PortfolioItem>,
+        private portfolioItemRepository: Repository<PortfolioItem>,
     ) {}
 
-    async create(portfolioItemData: PortfolioItem): Promise<PortfolioItem> {
-        return this.portfolioItemRepository.save(portfolioItemData);
+    async create(portfolioItem: PortfolioItem): Promise<PortfolioItem> {
+        return this.portfolioItemRepository.save(portfolioItem);
     }
 
     async findAll(query: any): Promise<PortfolioItem[]> {
-        const { status, title } = query;
-
-        const conditions: any = {};
-        if (status !== undefined) {
-            conditions.status = status === 'true' ? true : false;
-        }
-        if (title) {
-            conditions.title = title;
-        }
-
-        return this.portfolioItemRepository.find({ where: conditions });
+        // Implement query handling logic if needed
+        return this.portfolioItemRepository.find();
     }
 
-    async findOne(id: number): Promise<PortfolioItem | null> {
+    async findOne(id: number): Promise<PortfolioItem> {
         return this.portfolioItemRepository.findOneBy({ id });
     }
 
-    async update(id: number, portfolioItemData: Partial<PortfolioItem>): Promise<PortfolioItem> {
-        await this.portfolioItemRepository.update(id, portfolioItemData);
-        return this.portfolioItemRepository.findOneBy({ id });
+    async getImage(id: number): Promise<Buffer> {
+        const item = await this.portfolioItemRepository.findOneBy({ id });
+        return item ? item.image_data : null;
+    }
+
+    async update(id: number, portfolioItem: Partial<PortfolioItem>): Promise<PortfolioItem> {
+        await this.portfolioItemRepository.update(id, portfolioItem);
+        return this.findOne(id);
     }
 
     async remove(id: number): Promise<void> {

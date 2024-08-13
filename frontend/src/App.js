@@ -1,16 +1,13 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PortfolioGrid from "./components/PortfolioGrid";
-import PortfolioItem from "./components/PortfolioItem";
+import PortfolioLayout from "./components/PortfolioLayout/PortfolioLayout";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <Router>
         <Routes>
-          <Route path="/" element={<PortfolioGrid />} />
-          <Route path="/portfolio-item/:id" element={<PortfolioItem />} />
-          {/* Additional routes */}
+          <Route path="/" element={<PortfolioLayout />} />
         </Routes>
       </Router>
     </div>

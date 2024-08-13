@@ -1,7 +1,6 @@
-// src/portfolio-item/portfolio-item.controller.ts
-
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UploadedFile, UseInterceptors, Res } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express'; // Import Response from express
 import { PortfolioItemService } from './portfolio-item.service';
 import { PortfolioItem } from './portfolio-item.entity';
 
@@ -27,14 +26,23 @@ export class PortfolioItemController {
 
     @Get()
     async findAll(@Query() query: any) {
-        // Pass the query parameters to the service method
-        console.log('--------------------------------------------INTYRA');
         return this.portfolioItemService.findAll(query);
     }
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
         return this.portfolioItemService.findOne(+id);
+    }
+
+    @Get('image_data/:id') // Add a new endpoint to serve images
+    async getImage(@Param('id') id: string, @Res() res: Response) {
+        const image = await this.portfolioItemService.getImage(+id); // Ensure this method returns binary data
+        if (image) {
+            res.setHeader('Content-Type', 'image/jpeg'); // Adjust based on your image type
+            res.send(image);
+        } else {
+            res.status(404).send('Image not found');
+        }
     }
 
     @Patch(':id')
