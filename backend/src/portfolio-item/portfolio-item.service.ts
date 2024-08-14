@@ -1,3 +1,4 @@
+
 import { Injectable } from '@nestjs/common';
 import { PortfolioItem } from './portfolio-item.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,8 +16,18 @@ export class PortfolioItemService {
     }
 
     async findAll(query: any): Promise<PortfolioItem[]> {
-        // Implement query handling logic if needed
-        return this.portfolioItemRepository.find();
+        const { status } = query;
+        const where = {};
+
+        if (status) {
+            if (status === 'active') {
+                where['status'] = 1; // Active
+            } else if (status === 'inactive') {
+                where['status'] = 0; // Inactive
+            }
+        }
+
+        return this.portfolioItemRepository.find({ where });
     }
 
     async findOne(id: number): Promise<PortfolioItem> {

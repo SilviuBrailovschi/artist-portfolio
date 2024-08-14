@@ -1,12 +1,19 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+html, body{
+  min-height:100%;
+  overflow: auto;
 }
+
+body{
+  height:100vh;
+}
+
 .app{
   height: 100vh; /* Set the App height to the viewport height */
   display: flex;
   flex-direction: column;
   text-align: center;
+}
+
+p {
+  margin: 0!important;
 }

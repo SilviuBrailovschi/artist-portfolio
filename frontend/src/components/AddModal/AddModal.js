@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label, CustomInput } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from 'reactstrap';
 
 const AddModal = ({isAddModalOpen, handleData, toggle}) => {
 
@@ -19,14 +19,14 @@ const AddModal = ({isAddModalOpen, handleData, toggle}) => {
     const createFormData = () => {
         const formData = new FormData();
 
-        // Append the fields to the FormData object
+
         if (image) {
-            formData.append('image', image); // Assuming image is a File object or Blob
+            formData.append('image', image);
         }
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('url', url);
-        formData.append('isActive', isActive.toString()); // Convert boolean to string if needed
+        formData.append('client_site_url', url);
+        formData.append('status', Number(isActive));
 
         return formData;
     };

@@ -1,4 +1,7 @@
 /* src/components/PortfolioGrid.css */
+.card {
+    border: none!important;
+}
 
 .portfolio-grid {
     display: grid;
