@@ -1,25 +1,8 @@
-// import './App.css';
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// import PortfolioGrid from "./components/PortfolioGrid/PortfolioGrid";
-//
-// function App() {
-//   return (
-//     <div className="app">
-//       <Router>
-//         <Routes>
-//           <Route path="/" element={<PortfolioGrid />} />
-//         </Routes>
-//       </Router>
-//     </div>
-//   );
-// }
-//
-// export default App;
-// App.js
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PortfolioGrid from "./components/PortfolioGrid/PortfolioGrid";
-import MainLayout from './components/MainLayout/MainLayout'; // Import the layout component
+import MainLayout from './components/MainLayout/MainLayout';
+import Home from './components/Home/Home'
 
 function App() {
     return (
@@ -27,8 +10,8 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<MainLayout />}>
-                        <Route index element={<PortfolioGrid />} />
-                        {/* Add other routes here as children of MainLayout */}
+                        <Route index element={<Home />} />
+                        <Route path="portfolio" element={<PortfolioGrid />} />
                     </Route>
                 </Routes>
             </Router>

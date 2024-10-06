@@ -58,49 +58,56 @@ const PortfolioGrid = () => {
 
 
     return (
-            <Card>
+            <Card style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundImage: "url('/home-pic.jpg')",
+                backgroundSize: 'cover',
+                minHeight: '100%',
+                maxWidth: '80%',
+                minWidth: '80%'
+            }}>
+                {loading &&
+                    <Spinner color="primary" style={{height: '4rem', width: '4rem'}}>
+                        Loading...
+                    </Spinner>}
                 <AddModal isAddModalOpen={isAddModalOpen} handleData={handleAddPortfolio} toggle={handleAddModal}/>
-                <CardBody>
-                    <Row>
-                        <Col  sm={12} md={6} style={{marginBottom: '2rem'}}>
-                            <div >
-                                <Button color="primary" onClick={() => setStatusFilter('all')}>All</Button>
-                                <Button color="primary" onClick={() => setStatusFilter('active')} className="mx-2">Active</Button>
-                                <Button color="primary" onClick={() => setStatusFilter('inactive')}>Inactive</Button>
-                            </div>
-                        </Col>
-                        <Col  sm={12} md={6}>
-                            <div >
-                                <Button color="success"  onClick={handleAddModal}>Add Portfolio</Button>
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col sm={12}><hr/></Col>
-                    </Row>
-                    <Row className="justify-content-center align-items-center" style={{minHeight: '500px'}}>
-                        <Col sm={12} md={6} className="d-flex flex-column align-items-center ">
-                            {loading &&
-                                <Spinner color="primary" style={{height: '4rem', width: '4rem'}}>
-                                    Loading...
-                                </Spinner>}
-                            {error && <p className="error-message">{error}</p>}
-                            {!loading &&
-                                <div className="portfolio-grid">
-                                    {portfolioItems?.length === 0 && !loading && <p>No items found.</p>}
-                                    {portfolioItems?.map(item => (
-                                        <PortfolioItem
-                                            key={item.id}
-                                            item={item}
-                                            selectedItem={selectedItem}
-                                            getItems={fetchPortfolioItems}
-                                            onClick={handleSelectedItem}/>
-                                    ))}
+                {!loading &&
+                    <CardBody>
+                        <Row className="d-flex justify-content-center align-items-center" style={{ marginBottom: '2rem'}}>
+                            <Col  sm={12} md={4} lg={4} >
+                                <div >
+                                    <Button color="primary" onClick={() => setStatusFilter('all')}>All</Button>
+                                    <Button color="primary" onClick={() => setStatusFilter('active')} className="mx-2">Active</Button>
+                                    <Button color="primary" onClick={() => setStatusFilter('inactive')}>Inactive</Button>
                                 </div>
-                            }
-                        </Col>
-                    </Row>
-                </CardBody>
+                            </Col>
+                            <Col  sm={12} md={2} lg={2}>&nbsp;</Col>
+                            <Col  sm={12} md={4} lg={4}>
+                                <div>
+                                    <Button color="success"  onClick={handleAddModal}>Add Portfolio</Button>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row className="justify-content-center align-items-center" style={{minHeight: '500px'}}>
+                            <Col sm={12} md={6} className="d-flex flex-column align-items-center ">
+                                {error && <p className="error-message">{error}</p>}
+                                    <div className="portfolio-grid">
+                                        {portfolioItems?.length === 0 && !loading && <p>No items found.</p>}
+                                        {portfolioItems?.map(item => (
+                                            <PortfolioItem
+                                                key={item.id}
+                                                item={item}
+                                                selectedItem={selectedItem}
+                                                getItems={fetchPortfolioItems}
+                                                onClick={handleSelectedItem}/>
+                                        ))}
+                                    </div>
+                            </Col>
+                        </Row>
+                    </CardBody>
+                }
             </Card>
     );
 };

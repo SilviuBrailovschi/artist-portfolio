@@ -9,7 +9,8 @@ const Footer = () => {
             height: '50px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            padding: '20px'
         }}>
             <b>&copy; {new Date().getFullYear()} Silviu Brailovschi. All rights reserved.</b>
         </footer>
