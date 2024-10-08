@@ -6,7 +6,7 @@ A full-stack application for artists to showcase their portfolios. The applicati
 
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
-    - [MySQL Database](#mysql-database)
+    - [MongoDB Database](#mysql-database)
     - [Backend (NestJS API)](#backend-nestjs-api)
     - [Frontend (React App)](#frontend-react-app)
 - [License](#license)
@@ -14,66 +14,9 @@ A full-stack application for artists to showcase their portfolios. The applicati
 ## Prerequisites
 
 - Node.js and npm
-- MySQL
 - Git
 
 ## Setup
-
-### MySQL Database
-
-#### Installing MySQL
-
-##### Linux
-
-1. Update your package index:
-
-    ```bash
-    sudo apt update
-    ```
-
-2. Install MySQL:
-
-    ```bash
-    sudo apt install mysql-server
-    ```
-
-3. Secure your MySQL installation:
-
-    ```bash
-    sudo mysql_secure_installation
-    ```
-
-##### Windows
-
-1. Download and install MySQL Community Server from the [official website](https://dev.mysql.com/downloads/windows/installer/8.0.html).
-
-2. Follow the setup wizard to install MySQL and configure your settings.
-
-#### Importing the Database
-
-1. Open your command line interface.
-
-2. Navigate to the `database` folder in your project:
-
-    ```bash
-    cd path/to/artist-portfolio/database
-    ```
-
-3. Import the SQL file into your MySQL server:
-
-    - **Linux**:
-
-      ```bash
-      mysql -u your_username -p digital_artist < digital_artist.sql
-      ```
-
-    - **Windows**:
-
-      ```bash
-      mysql -u your_username -p digital_artist < digital_artist.sql
-      ```
-
-   Replace `your_username`, `your_database_name`, and `your_database_file.sql` with your MySQL username, the name of the database you want to create, and the name of your exported SQL file.
 
 ### Backend (NestJS API)
 
@@ -121,5 +64,7 @@ A full-stack application for artists to showcase their portfolios. The applicati
     npm start
     ```
 
-## License
+### Access URL : [http://localhost:3000](http://localhost:3000/)
+
+## License @TBSilviu
 
