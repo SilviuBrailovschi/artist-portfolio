@@ -1,14 +1,13 @@
-// src/components/PortfolioGrid.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardHeader, CardBody, CardFooter, Spinner, Row, Col, Button } from 'reactstrap';
+import { Card, CardBody, Spinner, Row, Col, Button } from 'reactstrap';
 import PortfolioItem from '../PortofolioItem/PortfolioItem';
 import './PortfolioGrid.css';
 import AddModal from "../AddModal/AddModal";
 
 const PortfolioGrid = () => {
     const [portfolioItems, setPortfolioItems] = useState([]);
-    const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'active', 'inactive'
+    const [statusFilter, setStatusFilter] = useState('all');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -25,7 +24,6 @@ const PortfolioGrid = () => {
             const response = await axios.get(`${apiUrl}/portfolio-item`, {
                 params: { status: statusFilter }
             });
-            console.log('API Response:', response.data);
             setPortfolioItems(response.data);
         } catch (error) {
             console.error("Error fetching portfolio items", error);
@@ -68,46 +66,64 @@ const PortfolioGrid = () => {
                 maxWidth: '80%',
                 minWidth: '80%'
             }}>
-                {loading &&
-                    <Spinner color="primary" style={{height: '4rem', width: '4rem'}}>
-                        Loading...
-                    </Spinner>}
                 <AddModal isAddModalOpen={isAddModalOpen} handleData={handleAddPortfolio} toggle={handleAddModal}/>
-                {!loading &&
-                    <CardBody>
-                        <Row className="d-flex justify-content-center align-items-center" style={{ marginBottom: '2rem'}}>
-                            <Col  sm={12} md={4} lg={4} >
-                                <div >
-                                    <Button color="primary" onClick={() => setStatusFilter('all')}>All</Button>
-                                    <Button color="primary" onClick={() => setStatusFilter('active')} className="mx-2">Active</Button>
-                                    <Button color="primary" onClick={() => setStatusFilter('inactive')}>Inactive</Button>
-                                </div>
-                            </Col>
-                            <Col  sm={12} md={2} lg={2}>&nbsp;</Col>
-                            <Col  sm={12} md={4} lg={4}>
-                                <div>
-                                    <Button color="success"  onClick={handleAddModal}>Add Portfolio</Button>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row className="justify-content-center align-items-center" style={{minHeight: '500px'}}>
-                            <Col sm={12} md={6} className="d-flex flex-column align-items-center ">
-                                {error && <p className="error-message">{error}</p>}
+                <Row className="d-flex justify-content-center align-items-center" style={{ margin: '2rem', minWidth: '100%'}}>
+                    <Col  sm={12} md={4} lg={4} >
+                        <div >
+                            <Button className="m-1" color="primary" onClick={() => setStatusFilter('all')}>All</Button>
+                            <Button color="primary" onClick={() => setStatusFilter('active')} className="mx-2">Active</Button>
+                            <Button color="primary" onClick={() => setStatusFilter('inactive')}>Inactive</Button>
+                        </div>
+                    </Col>
+                    <Col  sm={12} md={2} lg={2}>&nbsp;</Col>
+                    <Col  sm={12} md={4} lg={4}>
+                        <div>
+                            <Button color="success"  onClick={handleAddModal}>Add Portfolio</Button>
+                        </div>
+                    </Col>
+                </Row>
+
+                    <CardBody
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingBottom: '8rem',
+                            width: '100%'
+                        }}>
+                        {loading ?
+                            <Spinner color="primary"
+                                     style={{
+                                         height: '5rem',
+                                         width: '5rem',
+                                         color: 'lightgray!important',
+                                         fontSize: 'xx-large'
+                            }}>
+                                Loading...
+                            </Spinner> :
+                            <Row className="justify-content-center align-items-center" >
+                                <Col sm={12}  className="d-flex flex-column align-items-center ">
+                                    {error && <p className="error-message">{error}</p>}
                                     <div className="portfolio-grid">
-                                        {portfolioItems?.length === 0 && !loading && <p>No items found.</p>}
-                                        {portfolioItems?.map(item => (
-                                            <PortfolioItem
-                                                key={item.id}
-                                                item={item}
-                                                selectedItem={selectedItem}
-                                                getItems={fetchPortfolioItems}
-                                                onClick={handleSelectedItem}/>
-                                        ))}
+                                        {!portfolioItems?.length > 0 && !loading && <b style={{color: 'darkgray'}}>No items found.</b>}
+                                        {portfolioItems?.map(item => {
+                                            return(
+                                                <PortfolioItem
+                                                    key={item._id}
+                                                    id={item._id}
+                                                    item={item}
+                                                    selectedItem={selectedItem}
+                                                    onCancel={handleSelectedItem}
+                                                    getItems={fetchPortfolioItems}
+                                                />
+                                            )})
+                                        }
                                     </div>
-                            </Col>
-                        </Row>
+                                </Col>
+                            </Row>
+                        }
                     </CardBody>
-                }
+
             </Card>
     );
 };

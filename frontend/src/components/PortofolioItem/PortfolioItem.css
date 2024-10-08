@@ -1,16 +1,36 @@
-/* src/components/PortfolioItem.css */
+
 .portfolio-item {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     padding: 16px;
     background-color: #fff;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.portfolio-item:hover {
+    box-shadow: 0 8px 16px #003d59, 0 6px 20px #003d59;
+    transform: scale(1.05);
+}
+
+.selected {
+    box-shadow: 0 8px 16px #003d59, 0 6px 20px #003d59;
+    transform: scale(1.05);
+}
+
+.image-container {
+    min-height: 200px;
 }
 
 .portfolio-item img {
     width: 100%;
-    height: auto;
     display: block;
+    max-height: 200px;
 }
 
 .portfolio-item h3 {

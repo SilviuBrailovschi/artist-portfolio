@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PortfolioItemService } from './portfolio-item.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PortfolioItemController } from './portfolio-item.controller';
-import { PortfolioItem } from './portfolio-item.entity';
+import { PortfolioItemService } from './portfolio-item.service';
+import { PortfolioItemRepository } from './portfolio-item.repository';
+import { PortfolioItemSchema } from './portfolio-item.schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PortfolioItem])],
+  imports: [
+    MongooseModule.forFeature([{ name: 'PortfolioItem', schema: PortfolioItemSchema }]),
+  ],
   controllers: [PortfolioItemController],
-  providers: [PortfolioItemService],
+  providers: [PortfolioItemService, PortfolioItemRepository],
 })
 export class PortfolioItemModule {}
-

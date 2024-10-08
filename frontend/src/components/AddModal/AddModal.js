@@ -19,21 +19,26 @@ const AddModal = ({isAddModalOpen, handleData, toggle}) => {
     const createFormData = () => {
         const formData = new FormData();
 
-
         if (image) {
-            formData.append('image', image);
+            formData.append('image_data', image);
         }
         formData.append('title', title);
         formData.append('description', description);
         formData.append('client_site_url', url);
-        formData.append('status', Number(isActive));
+        formData.append('status', JSON.stringify(isActive));
 
         return formData;
     };
 
+
     const handleSubmit = () => {
         const data =  createFormData();
         handleData( data );
+        setIsActive(false);
+        setImage(null)
+        setTitle('')
+        setDescription('')
+        setUrl('')
     };
 
     return (

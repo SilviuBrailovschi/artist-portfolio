@@ -1,19 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PortfolioItem } from './portfolio-item/portfolio-item.entity';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PortfolioItemModule } from './portfolio-item/portfolio-item.module';
+
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'parola123',
-      database: 'digital_artist',
-      entities: [PortfolioItem],
-      synchronize: true,
-    }),
+    MongooseModule.forRoot('mongodb+srv://root:parola123@myfirstapp.hdasqyw.mongodb.net/?retryWrites=true&w=majority&appName=MyFirstApp'),
     PortfolioItemModule,
   ],
 })

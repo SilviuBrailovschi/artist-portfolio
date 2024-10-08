@@ -1,26 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './PortfolioItem.css';
 import axios from 'axios';
-import {Button} from "reactstrap";
+import { Button } from "reactstrap";
+import { encode } from 'base64-arraybuffer';
 import EditModal from "../EditModal/EditModal";
 
-const PortfolioItem = ({ item, onClick, selectedItem, getItems }) => {
-    const [imageUrl, setImageUrl] = useState(null);
-    const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+const PortfolioItem = ({ id, item, onCancel, selectedItem, getItems }) => {
+    const { data, type } = item?.image_data;
+    const base64String = encode(new Uint8Array(data));
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const newImageUrl = `data:${type};base64,${base64String}`;
 
     const handleEditClick = () => {
-        setIsEditModalOpen(true);
+        setIsEditModalOpen(prev => !prev);
     };
 
     const handleData = async (data) => {
         try {
-            await axios.patch(`/portfolio-item/${item.id}`, data, {
+            await axios.put(`/portfolio-item/${item._id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
             handleEditClick();
             getItems();
+            onCancel(null)
         } catch (error) {
             console.error('Error updating item', error);
         }
@@ -28,31 +32,23 @@ const PortfolioItem = ({ item, onClick, selectedItem, getItems }) => {
 
     const handleDeleteClick = async () => {
         try {
-            await axios.delete(`/portfolio-item/${item.id}`).then(resp => {
-                if(resp?.status === 200){
-                    getItems()
-                }
-            });
+            const resp = await axios.delete(`/portfolio-item/${item._id}`);
+            if (resp?.status === 200) {
+                getItems();
+            }
         } catch (error) {
             console.error('Error deleting item', error);
         }
     };
 
-    useEffect(() => {
-        const fetchImageUrl = async () => {
-            try {
-                const response = await axios.get(`/portfolio-item/image_data/${item.id}`, {
-                    responseType: 'blob'
-                });
-                const url = URL.createObjectURL(response.data);
-                setImageUrl(url);
-            } catch (error) {
-                console.error("Error fetching image", error);
-            }
-        };
-
-        fetchImageUrl().then();
-    }, [item.id]);
+    const handleClick = (e) => {
+        e.stopPropagation();
+        onCancel(item._id);
+    };
+    const handleCancel = (e) => {
+        e.stopPropagation();
+        onCancel(null)
+    }
 
     const getValidUrl = (url) => {
         if (!url) return '#';
@@ -61,65 +57,49 @@ const PortfolioItem = ({ item, onClick, selectedItem, getItems }) => {
 
     return (
         <div
-            id={item?.id}
-            className="portfolio-item"
-            onClick={() => onClick(item?.id)}
+            className={`portfolio-item ${selectedItem === item._id ? 'selected' : ''}`}
+            onClick={handleClick}
         >
-        <EditModal
+            <EditModal
                 isEditModalOpen={isEditModalOpen}
                 toggle={() => setIsEditModalOpen(!isEditModalOpen)}
                 handleData={handleData}
                 itemData={item}
             />
-            {imageUrl ? (
+            <div className="image-container">
                 <img
                     className="port-item"
-                    src={imageUrl}
+                    src={newImageUrl}
                     alt={item.title}
-                    style={{ maxWidth: '100%', height: 'auto' }}
                 />
-            ) : (
-                <p>Loading image...</p>
-            )}
+            </div>
             <h3 className="port-item">{item?.title}</h3>
             <p className="port-item">{item?.description}</p>
-            <a href={getValidUrl(item?.client_site_url)} target="_blank" rel="noopener noreferrer">
-                {item?.client_site_url}
+            <a href={getValidUrl(item?.client_site_url)}
+               target="_blank"
+               rel="noopener noreferrer"
+               style={{ marginTop: 'auto' }}
+            >
+                {item?.client_site_url.length > 30
+                    ? `${item.client_site_url.slice(0, 20)}...`
+                    : item.client_site_url}
             </a>
-
-            {(selectedItem === item?.id) ?
+            {selectedItem === item._id && (
                 <>
-                    <hr/>
+                    <hr />
                     <div className="portfolio-item-actions">
-                        <Button
-                            color="warning"
-                            className="mx-2"
-                            style={{minWidth: '72px'}}
-                            onClick={handleEditClick}>
+                        <Button color="primary" className="mx-2 my-2 btn-sm" style={{minWidth: '59px'}} onClick={handleEditClick}>
                             Edit
                         </Button>
-                        <Button
-                            color="danger"
-                            className="mx-2"
-                            style={{minWidth: '72px'}}
-                            onClick={handleDeleteClick}>
+                        <Button color="danger" className="mx-2 my-2 btn-sm" style={{minWidth: '59px'}} onClick={handleDeleteClick}>
                             Delete
                         </Button>
-                        <Button
-                            color="secondary"
-                            className="mx-2 my-2"
-                            style={{minWidth: '72px'}}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                onClick(null)
-                            }}>
+                        <Button color="secondary" className="mx-2 my-2 btn-sm" style={{minWidth: '59px'}} onClick={handleCancel}>
                             Cancel
                         </Button>
                     </div>
                 </>
-                : null }
-
+            )}
         </div>
     );
 };

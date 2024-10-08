@@ -13,7 +13,7 @@ const EditModal = ({ isEditModalOpen, itemData, handleData, toggle }) => {
             setTitle(itemData.title || '');
             setDescription(itemData.description || '');
             setUrl(itemData.client_site_url || '');
-            setIsActive(itemData.status === 1);
+            setIsActive(itemData.status);
         }
     }, [itemData]);
 
@@ -26,12 +26,12 @@ const EditModal = ({ isEditModalOpen, itemData, handleData, toggle }) => {
     const createFormData = () => {
         const formData = new FormData();
         if (image) {
-            formData.append('image', image);
+            formData.append('image_data', image);
         }
         formData.append('title', title);
         formData.append('description', description);
         formData.append('client_site_url', url);
-        formData.append('status', Number(isActive));
+        formData.append('status', isActive);
         return formData;
     };
 

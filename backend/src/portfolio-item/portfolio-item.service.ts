@@ -1,50 +1,38 @@
-
 import { Injectable } from '@nestjs/common';
-import { PortfolioItem } from './portfolio-item.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { PortfolioItemRepository } from './portfolio-item.repository';
+import { PortfolioItem } from './portfolio-item.interface';
 
 @Injectable()
 export class PortfolioItemService {
-    constructor(
-        @InjectRepository(PortfolioItem)
-        private portfolioItemRepository: Repository<PortfolioItem>,
-    ) {}
+    constructor(private readonly portfolioItemRepository: PortfolioItemRepository) {}
 
-    async create(portfolioItem: PortfolioItem): Promise<PortfolioItem> {
-        return this.portfolioItemRepository.save(portfolioItem);
-    }
-
-    async findAll(query: any): Promise<PortfolioItem[]> {
-        const { status } = query;
-        const where = {};
-
-        if (status) {
-            if (status === 'active') {
-                where['status'] = 1; // Active
-            } else if (status === 'inactive') {
-                where['status'] = 0; // Inactive
-            }
+    async findByStatus(status?: string): Promise<PortfolioItem[]> {
+        if (status === 'active') {
+            return this.portfolioItemRepository.findByStatus(true);
+        } else if (status === 'inactive') {
+            return this.portfolioItemRepository.findByStatus(false);
+        } else {
+            return this.portfolioItemRepository.findAll();
         }
-
-        return this.portfolioItemRepository.find({ where });
     }
 
-    async findOne(id: number): Promise<PortfolioItem> {
-        return this.portfolioItemRepository.findOneBy({ id });
+    async findAll(): Promise<PortfolioItem[]> {
+        return this.portfolioItemRepository.findAll();
     }
 
-    async getImage(id: number): Promise<Buffer> {
-        const item = await this.portfolioItemRepository.findOneBy({ id });
-        return item ? item.image_data : null;
+    async findById(id: string): Promise<PortfolioItem> {
+        return this.portfolioItemRepository.findById(id);
     }
 
-    async update(id: number, portfolioItem: Partial<PortfolioItem>): Promise<PortfolioItem> {
-        await this.portfolioItemRepository.update(id, portfolioItem);
-        return this.findOne(id);
+    async create(createPortfolioItemDto: any): Promise<PortfolioItem> {
+        return this.portfolioItemRepository.create(createPortfolioItemDto);
     }
 
-    async remove(id: number): Promise<void> {
-        await this.portfolioItemRepository.delete(id);
+    async update(id: string, updatePortfolioItemDto: PortfolioItem): Promise<PortfolioItem> {
+        return this.portfolioItemRepository.update(id, updatePortfolioItemDto);
+    }
+
+    async delete(id: string): Promise<void> {
+        return this.portfolioItemRepository.delete(id);
     }
 }
